@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Phishing Detection</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Default (Initial) Theme */
+        .default {
+            background: linear-gradient(135deg, #2193b0, #6dd5ed);
+            color: white;
+        }
+
+        /* Safe (Legitimate) Theme */
+        .safe {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+        }
+
+        /* Dangerous (Phishing) Theme */
+        .danger {
+            background: linear-gradient(135deg, #FF4C4C, #D32F2F);
+            color: white;
+        }
+
+        /* Fancy input box */
+        .input-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        input {
+            padding: 15px;
+            width: 300px;
+            font-size: 18px;
+            border-radius: 25px;
+            border: 2px solid #ccc;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #007BFF;
+            box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Fancy button */
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            background: #007BFF;
+            color: white;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        /* Animated Heading */
+        h2 {
+            font-size: 26px;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h3 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .show {
+            opacity: 1;
+        }
+
+        /* Keyframe Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="default" id="body">
+
+    <h2>🔍 Enter a URL to check if it is Legitimate or Phishing</h2>
+    <form action="/predict" method="post">
+        <div class="input-container">
+            <input type="text" name="url" id="urlInput" placeholder="Enter URL here" required>
+        </div>
+        <br>
+        <button type="submit">Check URL</button>
+    </form>
+    <br>
+    <h3 id="result">{{ prediction_text }}</h3>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let prediction = "{{ prediction_text }}";
+            let body = document.getElementById("body");
+            let resultText = document.getElementById("result");
+
+            if (prediction.includes("Legitimate")) {
+                body.className = "safe";
+                resultText.classList.add("show");
+            } else if (prediction.includes("Phishing")) {
+                body.className = "danger";
+                resultText.classList.add("show");
+            } else {
+                body.className = "default";
+            }
+        });
+
+        // Reset to default state when the page is refreshed
+        window.onbeforeunload = function() {
+            document.getElementById("body").className = "default";
+        };
+    </script>
+
+</body>
+</html>
