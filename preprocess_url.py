@@ -58,36 +58,16 @@ def preprocess_url(url):
     if url.startswith("http://") or url.startswith("https://"):
         url_without_protocol = url.split("//", 1)[1]  # Remove protocol part
         features.append(-1 if url_without_protocol.count('//') > 0 else 1)  # -1 = Redirect detected
+    else:
+        features.append(1)  # No redirect
 
-    # Feature 16: on_mouseover (Hardcoded, set to 0)
-    features.append(0)
+    # Feature 16-25: Hardcoded values
+    features += [0] * 9  # Features 16-24 (all 0)
+    features.append(0)  # Feature 25: Statistical_report
 
-    # Feature 17: RightClick (Hardcoded, set to 0)
-    features.append(0)
-
-    # Feature 18: Iframe (Hardcoded, set to 0)
-    features.append(0)
-
-    # Feature 19: Age_of_domain (Hardcoded, set to 0)
-    features.append(0)
-
-    # Feature 20: DNSRecord (Hardcoded, set to 0)
-    features.append(0)
-
-    # Feature 21: Web_traffic (Hardcoded, set to 0)
-    features.append(0)
-
-    # Feature 22: Page_Rank (Hardcoded, set to 0)
-    features.append(0)
-
-    # Feature 23: Google_Index (Hardcoded, set to -1)
-    features.append(-1)  # -1 = Not indexed
-
-    # Feature 24: Links_pointing_to_page (Hardcoded, set to 0)
-    features.append(0)
-
-    # Feature 25: Statistical_report (Hardcoded, set to 0)
-    features.append(0)
+    # Ensure the feature list has exactly 25 elements
+    if len(features) < 25:
+        missing_count = 25 - len(features)
+        features += [1] * missing_count  # Append default values
 
     return features
-
